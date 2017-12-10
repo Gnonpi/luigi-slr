@@ -8,7 +8,6 @@ DATA_FOLDER = CURRENT_FOLDER.parent.joinpath('data')
 
 
 class PathConfig(luigi.Config):
-    dev_clean = luigi.Parameter(default=DATA_FOLDER.joinpath('dev-clean.tar.gz'))
-    librispeech_path = luigi.Parameter(default=DATA_FOLDER.joinpath('LibriSpeech/dev-clean/'))
-    dev_npy = luigi.Parameter(default=DATA_FOLDER.joinpath('luigi-load.npy'))
-
+    dev_clean = luigi.Parameter(default=str(DATA_FOLDER.joinpath('dev-clean.tar.gz')))
+    librispeech_path = luigi.Parameter(default=str(DATA_FOLDER.joinpath('LibriSpeech/dev-clean/')))
+    dev_npy = luigi.Parameter(default=str(DATA_FOLDER.joinpath('luigi-load.npy')))

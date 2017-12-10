@@ -2,12 +2,12 @@ import datetime
 
 import luigi
 
-from download_tasks import LoadDataset
+from luigi_openslr.load_tasks import LoadDataset
 
 
 class PipelineSlr(luigi.WrapperTask):
     def requires(self):
-        return LoadDataset()
+        return [LoadDataset()]
 
     def output(self):
         return luigi.LocalTarget('pipe-status')
