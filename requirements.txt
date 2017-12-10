@@ -1,0 +1,11 @@
+# Pypi
+pip == 9.0
+
+# Requests
+requests == 2.18
+
+# Pandas
+pandas == 0.20
+
+# Luigi
+luigi == 2.7
