@@ -14,5 +14,5 @@ class PipelineSlr(luigi.WrapperTask):
 
     def run(self):
         today_str = datetime.datetime.now().strftime("%Y-%B-%d at %I:%M%p")
-        with self.output().open('a') as f:
+        with self.output().open('w') as f:
             f.write('Pipeline run successfully the {}.'.format(today_str))
