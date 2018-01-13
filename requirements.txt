@@ -1,5 +1,5 @@
 # Pypi
-pip == 9.0
+pip == 9.0.1
 
 # Requests
 requests == 2.18
@@ -9,3 +9,15 @@ pandas == 0.20
 
 # Luigi
 luigi == 2.7
+
+# Keras
+keras == 2.1.2
+
+# Tensorflow
+tensorflow == 1.4.1
+
+# h5py
+h5py == 2.7.1
+
+# PySoundFile
+soundfile == 0.8.1

@@ -2,12 +2,12 @@ import datetime
 
 import luigi
 
-from luigi_openslr.load_tasks import LoadDataset
+from luigi_openslr.neural_tasks import TrainModel
 
 
 class PipelineSlr(luigi.WrapperTask):
     def requires(self):
-        return [LoadDataset()]
+        return [TrainModel()]
 
     def output(self):
         return luigi.LocalTarget('pipe-status')
