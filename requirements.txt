@@ -21,3 +21,6 @@ h5py == 2.7.1
 
 # PySoundFile
 soundfile == 0.8.1
+
+# Required by luigid
+sqlalchemy == 1.2.0
