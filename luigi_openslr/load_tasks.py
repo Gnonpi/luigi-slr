@@ -1,5 +1,3 @@
-import fileinput
-import json
 import shutil
 import tarfile
 from pathlib import Path
@@ -13,6 +11,7 @@ from luigi import Task
 from luigi.local_target import LocalTarget
 
 from luigi_openslr.luigi_config import PathConfig, URL_OPENSLR, DATA_FOLDER
+from luigi_openslr.utils.audio import dict_audio_to_matrix, id_to_variable, loading_audio_files
 
 
 class DownloadDatasetTargz(luigi.Task):
@@ -99,8 +98,10 @@ class SplitTrainAndTest(luigi.Task):
         return LoadSpeakerInfo()
 
     def output(self):
-        return [luigi.LocalTarget(PathConfig().train_id2variable),
-                luigi.LocalTarget(PathConfig().test_id2variable)]
+        return {
+            'train_var': luigi.LocalTarget(PathConfig().train_id2variable),
+            'test_var': luigi.LocalTarget(PathConfig().test_id2variable)
+        }
 
     def run(self):
         logger = logging.getLogger('training')
@@ -112,11 +113,11 @@ class SplitTrainAndTest(luigi.Task):
         df_test = df_id2variable[~msk]
 
         logger.debug('Saving train set')
-        with open(self.output()[0].path, 'wb') as f:
+        with open(self.output()['train_var'].path, 'wb') as f:
             df_train.to_pickle(f)
 
         logger.debug('Saving test set')
-        with open(self.output()[1].path, 'wb') as f:
+        with open(self.output()['test_var'].path, 'wb') as f:
             df_test.to_pickle(f)
 
 
@@ -124,17 +125,18 @@ class AudioToMatrix(luigi.Task):
     variable_prediction = luigi.Parameter()
 
     def output(self):
-        return {'X_train': luigi.LocalTarget(PathConfig().x_train_mat),
-                'y_train': luigi.LocalTarget(PathConfig().y_train_mat)
-                'X_test': luigi.LocalTarget(PathConfig().x_test_mat),
-                'y_test': luigi.LocalTarget(PathConfig().y_test_mat),
-                }
+        return {
+            'X_train': luigi.LocalTarget(PathConfig().x_train_mat),
+            'y_train': luigi.LocalTarget(PathConfig().y_train_mat),
+            'X_test': luigi.LocalTarget(PathConfig().x_test_mat),
+            'y_test': luigi.LocalTarget(PathConfig().y_test_mat),
+        }
 
     def requires(self):
         return SplitTrainAndTest(self.variable_prediction)
 
     def run(self):
-        df_train_id2variable = pd.read_pickle(self.input()['split_dataset'][0].path)
+        df_train_id2variable = pd.read_pickle(self.input()['train_var'].path)
         # y_train = df_train_id2variable[str(self.variable_prediction)]
 
         train_id = df_train_id2variable['ID'].tolist()

@@ -18,8 +18,10 @@ class PathConfig(luigi.Config):
     train_id2variable = luigi.Parameter(default=str(DATA_FOLDER.joinpath('id_to_variable.json')))
     test_id2variable = luigi.Parameter(default=str(DATA_FOLDER.joinpath('id_to_variable.json')))
 
-    DATA_FOLDER.mkdir('matrices/')
+    # DATA_FOLDER.joinpath('matrices/')
     matrix_folder = DATA_FOLDER.joinpath('matrices')
+    if not matrix_folder.exists():
+        matrix_folder.mkdir()
 
     x_train_mat = luigi.Parameter(default=str(matrix_folder.joinpath('xtrain.npz')))
     y_train_mat = luigi.Parameter(default=str(matrix_folder.joinpath('ytrain.npz')))
